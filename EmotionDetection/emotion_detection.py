@@ -19,4 +19,4 @@ def emotion_detector(text_to_analyze):
     }
 
     print(json.dumps(analyzed_emotions, indent = 4))
-    return(json.dumps(analyzed_emotions, indent = 4))
+    return(analyzed_emotions)
