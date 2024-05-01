@@ -1,3 +1,6 @@
+'''Executing this function initiates the application of sentiment
+    analysis to be executed over the Flask channel and deployed on
+    localhost:5000.'''
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -5,17 +8,22 @@ app = Flask("Emotion Detector")
 
 @app.route("/emotionDetector")
 def sent_detector():
+    '''This code recieves text from HTML/JS interface,
+    uses AI wizardry to decide the emotions, and returns those emotions in a formatted output'''
     text_to_analyze = request.args.get('textToAnalyze')
-
-    if not text_to_analyze:
-        return "YOU MUST ENTER A SENTENCE!"
 
     response = emotion_detector(text_to_analyze)
 
-    return f"For the given statement, the system response is 'anger': {response['anger']}, 'disgust': {response['disgust']}, 'fear': {response['fear']}, 'joy': {response['joy']}, and 'sadness': {response['sadness']}. The dominant emotion is {response['dominant_emotion']}."
+    if not response['dominant_emotion']:
+        return "Invalid text! Please try again!"
+
+    return f"For the given statement, the system response is 'anger': {response['anger']}, \
+    'disgust': {response['disgust']}, 'fear': {response['fear']}, 'joy': {response['joy']}, \
+    and 'sadness': {response['sadness']}. The dominant emotion is {response['dominant_emotion']}."
 
 @app.route("/")
 def render_index_page():
+    '''Starts the app'''
     return render_template('index.html')
 
 if __name__ == "__main__":
